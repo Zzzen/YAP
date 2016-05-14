@@ -8,9 +8,7 @@ const playerElement = document.getElementById("player") as HTMLVideoElement;
 
 function selectVideo() {
     dialog.showOpenDialog({ title: "select video" }, filenames => {
-        if (filenames.length) {
-
-
+        if (filenames) {
             let file = filenames[0];
             file = "file://" + file.replace(/\\/g, "/");
             playerElement.src = file;

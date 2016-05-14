@@ -9,6 +9,8 @@
     "files": [
         "typings/main.d.ts",
         "main.ts",
-        "scripts/index.ts"
+        "scripts/index.ts",
+        "scripts/userData.ts",
+        "scripts/utility.ts"
     ]
 }

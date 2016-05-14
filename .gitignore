@@ -7,3 +7,5 @@ views/*.html
 
 main.js
 scripts/index.js
+scripts/userData.js
+scripts/utility.js
