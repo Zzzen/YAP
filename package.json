@@ -1,0 +1,27 @@
+{
+  "name": "yap",
+  "version": "0.0.1",
+  "description": "yet another player",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "typescript",
+    "electron",
+    "video",
+    "player"
+  ],
+  "author": "Zen",
+  "license": "WTFPL",
+  "devDependencies": {
+    "electron-prebuilt": "^1.0.2"
+  },
+  "dependencies": {
+    "grunt": "^1.0.0",
+    "gulp": "^3.9.1",
+    "gulp-jade": "^1.1.0",
+    "gulp-typescript": "^2.13.4",
+    "videojs": "^1.0.0"
+  }
+}

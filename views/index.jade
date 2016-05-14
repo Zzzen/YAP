@@ -1,0 +1,19 @@
+doctype html
+html(lang="en")
+    head
+        title No title
+        meta(charset="utf-8")
+        meta(http-equiv="X-UA-Compatible" content="IE=edge")
+        meta(name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1")
+
+    link(href="../stylesheets/index.css" rel="stylesheet" type="text/css")
+
+    link(href="../stylesheets/video-js.min.css" rel="stylesheet" type="text/css")
+    script(src="../libs/video.min.js")
+
+    body
+        video#player.video-js.vjs-default-skin(controls)
+
+        script.
+            videojs.options.flash.swf = "video-js.swf";
+            const cao = require("../scripts/index.js")

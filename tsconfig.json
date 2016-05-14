@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "sourceMap": true,
+        "noImplicitAny": true,
+        "noFallthroughCasesInSwitch": true
+    },
+    "files": [
+        "typings/main.d.ts",
+        "main.ts",
+        "scripts/index.ts"
+    ]
+}

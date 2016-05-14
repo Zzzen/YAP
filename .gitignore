@@ -1,0 +1,9 @@
+node_modules
+typings
+
+*.js.map
+
+views/*.html
+
+main.js
+scripts/index.js
