@@ -4,6 +4,9 @@
         "**/*.js": {
             "when": "$(basename).ts"
         },
+        "**/*.html": {
+            "when": "$(basename).jade"
+        },
         "**/*.js.map": true,
         "typings": true,
         "node_modules": true

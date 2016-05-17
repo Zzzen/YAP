@@ -6,16 +6,24 @@ html(lang="en")
         meta(http-equiv="X-UA-Compatible" content="IE=edge")
         meta(name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1")
 
-    link(href="../stylesheets/index.css" rel="stylesheet" type="text/css")
+    //- link(href="../stylesheets/index.css" rel="stylesheet" type="text/css")
 
     link(href="../stylesheets/video-js.min.css" rel="stylesheet" type="text/css")
     script(src="../libs/video.min.js")
+    
+    script(src="../node_modules/es6-shim/es6-shim.min.js")
+    script(src="../node_modules/zone.js/dist/zone.js")
+    script(src="../node_modules/reflect-metadata/Reflect.js")
 
     body
         video#player.video-js.vjs-default-skin(controls)
-        
+
         #playList.isShown
+
+        yap-root-list
 
         script.
             videojs.options.flash.swf = "video-js.swf";
-            const cao = require("../scripts/index.js")
+            const cao = require("../scripts/index");
+            const app = require("../app/main");
+            

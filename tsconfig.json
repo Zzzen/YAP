@@ -4,13 +4,13 @@
         "module": "commonjs",
         "sourceMap": true,
         "noImplicitAny": true,
-        "noFallthroughCasesInSwitch": true
+        "noFallthroughCasesInSwitch": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true
     },
-    "files": [
-        "typings/main.d.ts",
-        "main.ts",
-        "scripts/index.ts",
-        "scripts/userData.ts",
-        "scripts/utility.ts"
+    "exclude": [
+        "node_modules",
+        "typings/main",
+        "typings/main.d.ts"
     ]
 }

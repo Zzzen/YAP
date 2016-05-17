@@ -1,26 +1,5 @@
 import fs = require("fs");
 
-export interface Video {
-    fullpath: string;
-    position: number;
-}
-
-export interface PlayList {
-    name: string;
-    videos: Video[];
-}
-
-export interface RootList {
-    items: (Video | PlayList)[];
-}
-
-export function isVideo(arg: any): arg is Video {
-    return arg.fullpath !== undefined;
-}
-
-export function isPlayList(arg: any): arg is PlayList {
-    return !isVideo(arg);
-}
 
 export function writeUserData(data: Object) {
     return new Promise<void>((resolve, reject) => {
@@ -42,7 +21,7 @@ export function getUserData() {
             } else {
                 resolve(data);
             }
-        })
+        });
     });
 }
 

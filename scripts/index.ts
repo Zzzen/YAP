@@ -1,4 +1,5 @@
 import electron = require("electron");
+import main = require("../app/main");
 
 const dialog = electron.remote.dialog;
 
