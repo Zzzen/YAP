@@ -1,7 +1,6 @@
-import electron = require("electron");
+import {app, BrowserWindow, Menu} from "electron";
 
-const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
+import {template as menuTemplate} from "./scripts/menuTemplate";
 
 let mainWindow: Electron.BrowserWindow = undefined;
 
@@ -17,7 +16,11 @@ function createWindow() {
     });
 }
 
-app.on("ready", createWindow);
+app.on("ready", () => {
+    createWindow();
+    const menu = Menu.buildFromTemplate(menuTemplate);
+    Menu.setApplicationMenu(menu);
+});
 
 app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {
@@ -28,7 +31,7 @@ app.on("window-all-closed", () => {
 app.on("activate", () => {
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if (mainWindow === null) {
+    if (!mainWindow) {
         createWindow();
     }
 });

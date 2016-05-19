@@ -1,5 +1,6 @@
 body {
     background-color: black;
+    overflow: hidden;
 }
 
 #player {
@@ -10,13 +11,13 @@ body {
     height: 100%;
 }
 
-#playList {
+#rootList {
     position: absolute;
     right: 0px;
     top: 0px;
     width: 300px;
     height: 100%;
-    background: rgba(0, 0, 0, 80%);
+    background-color: rgba(199, 175, 190, 0.79);
     /*  Hide  */
     visibility: false;
     opacity: 0;
@@ -24,9 +25,22 @@ body {
     transition: visibility 0s .12s linear, opacity .12s ease-in, transform .12s ease-in;
 }
 
-#playList.isShown {
+#rootList.isShown {
     visibility: true;
     opacity: 1;
     transform: translateX(0px);
-    transition: visibility 0s 0s linear , opacity .36s ease-out, transform .36s ease-out;
+    transition: visibility 0s 0s linear, opacity .36s ease-out, transform .36s ease-out;
+}
+
+#handler_vertical {
+    z-index: 200;
+    width: 8px;
+    height: 100%;
+    padding: 5px 0;
+    cursor: col-resize;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-left: -4px;
+    background-color: cadetblue;
 }

@@ -8,3 +8,5 @@ views/*.html
 main.js
 scripts/*.js
 app/*.js
+
+userData.json

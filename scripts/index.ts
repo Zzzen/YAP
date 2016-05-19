@@ -1,29 +1,29 @@
-import electron = require("electron");
-import main = require("../app/main");
+// import electron = require("electron");
+// import main = require("../app/main");
 
-const dialog = electron.remote.dialog;
-
-
-const playerElement = document.getElementById("player") as HTMLVideoElement;
+// const dialog = electron.remote.dialog;
 
 
-function selectVideo() {
-    dialog.showOpenDialog({ title: "select video" }, filenames => {
-        if (filenames) {
-            let file = filenames[0];
-            file = "file://" + file.replace(/\\/g, "/");
-            playerElement.src = file;
-            playerElement.play();
-        }
-    });
-}
+// const playerElement = document.getElementById("player") as HTMLVideoElement;
 
-selectVideo();
 
-playerElement.addEventListener('error', event => {
-    console.log(event);
-});
+// function selectVideo() {
+//     dialog.showOpenDialog({ title: "select video" }, filenames => {
+//         if (filenames) {
+//             let file = filenames[0];
+//             file = "file://" + file.replace(/\\/g, "/");
+//             playerElement.src = file;
+//             playerElement.play();
+//         }
+//     });
+// }
 
-playerElement.addEventListener("mousewheel", event => {
-    console.log(event.wheelDeltaY);
-});
+// selectVideo();
+
+// playerElement.addEventListener('error', event => {
+//     console.log(event);
+// });
+
+// playerElement.addEventListener("mousewheel", event => {
+//     console.log(event.wheelDeltaY);
+// });
