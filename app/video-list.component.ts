@@ -6,7 +6,7 @@ import {VideoComponent} from "./video.component";
 @Component({
     selector: "yap-video-list",
     template: `
-        <ul>
+        <ul class="yap-video-list">
             <span> {{videoList.name}} </span>
             <yap-video *ngFor="let x of videoList.videos" [video]="x"> </yap-video>
         </ul>

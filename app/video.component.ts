@@ -6,9 +6,9 @@ import {VideoService} from "./video.service";
 @Component({
     selector: "yap-video",
     template: `
-        <div *ngIf="video">
-            <a> {{video.fullpath}} </a>
-            <button (click)="onRemove()"> delete me </button>  
+        <div class="yap-video">
+            <a (click)="play()"> {{getFilename(video.fullpath)}} </a>
+            <button (click)="onRemove()" class="btn badge" > X </button>  
         </div>
     `
 })
@@ -22,5 +22,14 @@ export class VideoComponent {
 
     onRemove() {
         this.videoService.removeVideo(this.video);
+    }
+
+    play() {
+        this.videoService.playVideo(this.video);
+    }
+
+    getFilename(fullpath: string) {
+        const reg = /([^\/\\]+)$/;
+        return reg.exec(fullpath)[0];
     }
 }

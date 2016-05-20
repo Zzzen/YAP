@@ -44,3 +44,35 @@ body {
     margin-left: -4px;
     background-color: cadetblue;
 }
+
+.yap-video {
+    position: relative;
+    transition: transform .36s ease-in-out;
+}
+
+.yap-video>a {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    border-width: 4px;
+    border-color: blueviolet;
+    cursor: pointer;
+    -webkit-user-select: none;
+}
+
+.yap-video:hover {
+    transform: translateX(-20px);
+    transition: transform .12s ease-in-out;
+}
+
+.yap-video>button {
+    position: absolute;
+    right: 0;
+    vertical-align: middle;
+    transform: translateY(-100%);
+}
+
+/*remove the giant play button of videojs*/
+.vjs-big-play-button {
+    display: none !important;
+}

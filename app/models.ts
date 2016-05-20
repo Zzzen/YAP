@@ -8,7 +8,9 @@ export interface VideoList {
     videos: Video[];
 }
 
-export type RootList = (Video | VideoList)[];
+export type VideoOrVideoList = Video | VideoList;
+
+export type RootList = VideoOrVideoList[];
 
 
 export function isVideoList(arg: any): arg is VideoList {

@@ -6,7 +6,7 @@ import {Video} from "./models";
 @Component({
     selector: "yap-player",
     template: `
-        <video controls class="video-js vjs-default-skin" id="player" (timeupdate)="onTimeUpdate(event)"> </video>
+        <video controls class="video-js vjs-default-skin" id="player" (timeupdate)="onTimeUpdate()"> </video>
     `
 })
 export class PlayerComponent implements OnInit, OnDestroy {
@@ -30,20 +30,24 @@ export class PlayerComponent implements OnInit, OnDestroy {
     }
 
     playVideo(video: Video) {
-        const url = "file://" + video.fullpath.replace(/\\/g, "/");
-        this.currentVideo = video;
-        this.jsPlayer.src(url);
-        this.jsPlayer.play();
+        if (video === this.currentVideo) {
+            return;
+        } else {
+            const url = "file://" + video.fullpath.replace(/\\/g, "/");
+            this.currentVideo = video;
+            this.jsPlayer.src(url);
+            this.jsPlayer.currentTime(video.position);
+            this.jsPlayer.play();
+        }
     }
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
     }
 
-    onTimeUpdate(event: Event) {
+    onTimeUpdate() {
         if (this.currentVideo) {
-            this.currentVideo.position = (event.target as HTMLVideoElement).currentTime;
+            this.currentVideo.position = this.jsPlayer.currentTime();
         }
-        // console.log((event.target as HTMLVideoElement).currentTime);
     }
 }
