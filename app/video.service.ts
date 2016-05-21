@@ -1,6 +1,6 @@
 import {Injectable, EventEmitter} from "@angular/core";
 
-import {Video, VideoList, isVideoList, RootList} from "./models";
+import {Video, VideoList, VideoOrVideoList, RootList, isVideoList, isVideo} from "./models";
 
 import {ipcRenderer, remote} from "electron";
 
@@ -9,6 +9,8 @@ import {getUserData, writeUserData} from "./userData";
 @Injectable()
 export class VideoService {
     private data: RootList;
+
+    private forceQuit = false;
 
     public updateEventEmitter = new EventEmitter() as EventEmitter<(Video | VideoList)[]>;
 
@@ -20,21 +22,21 @@ export class VideoService {
         ipcRenderer.on("openVideo", (event: any, fullpath: string) => {
             console.log(fullpath);
 
-            const video = {
-                fullpath,
-                position: 0
-            };
+            const found = this.findVideo(fullpath);
 
-            this.addData(video);
-            this.playVideo(video);
+            if (found) {
+                this.playVideo(found);
+            } else {
+                const video = { fullpath, position: 0 };
+                this.addData(video);
+                this.playVideo(video);
+            }
         });
 
 
+        window.onbeforeunload = event => { this.onWindowClose(event); };
 
-        remote.getCurrentWindow().on("close", event => {
-            writeUserData(this.data);
-        });
-
+        // read data from config file
         (async () => {
             try {
                 (await getUserData()).forEach(x => this.data.push(x));
@@ -42,8 +44,24 @@ export class VideoService {
                 this.data = [];
             }
         })();
-
     }
+
+    async onWindowClose(event: BeforeUnloadEvent) {
+        if (this.forceQuit) {
+            event.returnValue = true;
+        } else {
+            this.forceQuit = true;
+
+            event.returnValue = false;
+            remote.getCurrentWindow().hide();
+
+            try {
+                await writeUserData(this.data);
+            } finally {
+                window.close();
+            }
+        }
+    };
 
     getData() {
         return Promise.resolve(this.data);
@@ -78,6 +96,18 @@ export class VideoService {
 
     addData(data: Video | VideoList) {
         this.data.push(data);
+    }
+
+    findVideo(fullpath: string) {
+        function iter(x: VideoOrVideoList): Video {
+            if (isVideo(x)) {
+                return x.fullpath === fullpath ? x : undefined;
+            } else {
+                return x.videos.map(iter).reduce((prev, current) => { return prev || current; }, undefined);
+            }
+        }
+
+        return this.data.map(iter).reduce((prev, current) => { return prev || current; }, undefined);
     }
 
     playVideo(video: Video) {

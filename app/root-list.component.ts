@@ -1,7 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 
-import {VideoComponent} from "./video.component";
-import {VideoListComponent} from "./video-list.component";
+import {TreeviewItemComponent} from "./treeview-item.component";
 import {Video, VideoList} from "./models";
 import {VideoService} from "./video.service";
 import {PlayerComponent} from "./player.component";
@@ -14,13 +13,12 @@ import {PlayerComponent} from "./player.component";
             <div id="handler_vertical" (mousedown)="startDragging()"></div>
             <ul>
                 <li *ngFor="let x of data">
-                    <yap-video *ngIf="!isVideoList(x)" [video]="x"> </yap-video>
-                    <yap-video-list *ngIf="isVideoList(x)" [videoList]="x"> </yap-video-list>
+                    <yap-item [data]="x"> </yap-item> 
                 </li>
             </ul>
         </div>
     `,
-    directives: [VideoComponent, VideoListComponent, PlayerComponent],
+    directives: [TreeviewItemComponent, PlayerComponent],
     providers: [VideoService]
 })
 export class RootListComponent implements OnInit {

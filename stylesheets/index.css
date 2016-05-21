@@ -18,6 +18,7 @@ body {
     width: 300px;
     height: 100%;
     background-color: rgba(199, 175, 190, 0.79);
+    -webkit-user-select: none;
     /*  Hide  */
     visibility: false;
     opacity: 0;
@@ -57,7 +58,6 @@ body {
     border-width: 4px;
     border-color: blueviolet;
     cursor: pointer;
-    -webkit-user-select: none;
 }
 
 .yap-video:hover {

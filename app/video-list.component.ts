@@ -1,22 +1,19 @@
-import {Component, Input} from "@angular/core";
+import {Component, Input, forwardRef} from "@angular/core";
 
-import {Video, VideoList} from "./models";
-import {VideoComponent} from "./video.component";
+import {VideoList} from "./models";
+import {TreeviewItemComponent}  from "./treeview-item.component";
 
 @Component({
     selector: "yap-video-list",
     template: `
         <ul class="yap-video-list">
             <span> {{videoList.name}} </span>
-            <yap-video *ngFor="let x of videoList.videos" [video]="x"> </yap-video>
+            <yap-item *ngFor="let x of videoList.videos" [data]="x"> </yap-item>
         </ul>
     `,
-    directives: [VideoComponent]
+    directives: [forwardRef(() => TreeviewItemComponent)]
 })
 export class VideoListComponent {
     @Input()
-    videoList: VideoList = {
-        name: "",
-        videos: [] as Video[]
-    };
+    videoList: VideoList;
 }
