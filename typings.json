@@ -4,6 +4,7 @@
   "dependencies": {},
   "ambientDependencies": {
     "github-electron": "registry:dt/github-electron#0.37.8+20160509083739",
+    "jquery": "registry:dt/jquery#1.10.0+20160417213236",
     "node": "registry:dt/node#4.0.0+20160509154515",
     "videojs": "registry:dt/videojs#0.0.0+20160316155526"
   }

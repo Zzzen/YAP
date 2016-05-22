@@ -1,4 +1,5 @@
-import {Component, Input, forwardRef} from "@angular/core";
+import {Component, Input, forwardRef, ElementRef} from "@angular/core";
+import * as $ from "jquery";
 
 import {VideoList} from "./models";
 import {TreeviewItemComponent}  from "./treeview-item.component";
@@ -6,9 +7,11 @@ import {TreeviewItemComponent}  from "./treeview-item.component";
 @Component({
     selector: "yap-video-list",
     template: `
+        <a (click)="toggle()" > <span>{{isExpanded? "▼": "▲"}}</span> {{videoList.name}} </a>
         <ul class="yap-video-list">
-            <span> {{videoList.name}} </span>
-            <yap-item *ngFor="let x of videoList.videos" [data]="x"> </yap-item>
+            <li  *ngFor="let x of videoList.videos">
+                <yap-item [data]="x"> </yap-item>            
+            </li>
         </ul>
     `,
     directives: [forwardRef(() => TreeviewItemComponent)]
@@ -16,4 +19,14 @@ import {TreeviewItemComponent}  from "./treeview-item.component";
 export class VideoListComponent {
     @Input()
     videoList: VideoList;
+
+    isExpanded = true;
+
+    constructor(private elementRef: ElementRef) {
+    }
+
+    toggle() {
+        this.isExpanded = !this.isExpanded;
+        $(this.elementRef.nativeElement).children("ul").toggle("fast");
+    }
 }

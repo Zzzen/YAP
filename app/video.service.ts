@@ -1,10 +1,12 @@
 import {Injectable, EventEmitter} from "@angular/core";
+import {ipcRenderer, remote} from "electron";
+import path = require("path");
+import {Stats} from "fs";
 
 import {Video, VideoList, VideoOrVideoList, RootList, isVideoList, isVideo} from "./models";
-
-import {ipcRenderer, remote} from "electron";
-
 import {getUserData, writeUserData} from "./userData";
+import {readDir, stat} from "./promisifiedNode";
+
 
 @Injectable()
 export class VideoService {
@@ -34,6 +36,8 @@ export class VideoService {
         });
 
 
+        ipcRenderer.on("openDir", (event: any, dirpath: string) => { this.onDirOpen(dirpath); });
+
         window.onbeforeunload = event => { this.onWindowClose(event); };
 
         // read data from config file
@@ -44,6 +48,47 @@ export class VideoService {
                 this.data = [];
             }
         })();
+    }
+
+    async onDirOpen(dirpath: string) {
+        async function createVideoListFromDir(currentDir: string): Promise<VideoList> {
+            try {
+                console.log("currentDir: " + currentDir);
+
+                const videoList: VideoList = {
+                    name: currentDir,
+                    videos: []
+                };
+
+                const files = await readDir(currentDir);
+                const fileStatsPromises = files.map(filename => path.join(currentDir, filename)).map(stat);
+                const statses: Stats[] = [];
+
+                for (const promise of fileStatsPromises) {
+                    statses.push(await promise);
+                }
+
+                for (let i = 0; i < statses.length; i++) {
+                    const stats = statses[i];
+                    if (stats.isFile()) {
+                        videoList.videos.push({ fullpath: path.join(currentDir, files[i]), position: 0 });
+                    } else {
+                        const innerList = await createVideoListFromDir(path.join(currentDir, files[i]));
+                        videoList.videos.push(innerList);
+                    }
+                }
+
+                return videoList;
+            } catch (err) {
+                console.log(err);
+                return undefined;
+            }
+        }
+
+        const videoList = await createVideoListFromDir(dirpath);
+        if (videoList) {
+            this.data.push(videoList);
+        }
     }
 
     async onWindowClose(event: BeforeUnloadEvent) {

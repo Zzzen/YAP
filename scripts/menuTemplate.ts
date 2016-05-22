@@ -16,6 +16,17 @@ export let template: Electron.MenuItemOptions[] = [
                         }
                     });
                 }
+            }, {
+                label: "Directory",
+                accelerator: "CmdOrCtrl+Shift+O",
+                click: (item: Electron.MenuItem, focusedWindow: Electron.BrowserWindow) => {
+                    const options: Electron.OpenDialogOptions = { properties: ["openDirectory"] };
+                    dialog.showOpenDialog(options, (dirnames) => {
+                        if (dirnames) {
+                            focusedWindow.webContents.send("openDir", dirnames[0]);
+                        }
+                    });
+                }
             }]
     },
     {

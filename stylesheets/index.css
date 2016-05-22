@@ -19,15 +19,17 @@ body {
     height: 100%;
     background-color: rgba(199, 175, 190, 0.79);
     -webkit-user-select: none;
+    overflow-y: auto;
+    z-index: 100;
     /*  Hide  */
-    visibility: false;
+    pointer-events: none;
     opacity: 0;
     transform: translateX(300px);
     transition: visibility 0s .12s linear, opacity .12s ease-in, transform .12s ease-in;
 }
 
 #rootList.isShown {
-    visibility: true;
+    pointer-events: inherit;
     opacity: 1;
     transform: translateX(0px);
     transition: visibility 0s 0s linear, opacity .36s ease-out, transform .36s ease-out;
@@ -65,14 +67,23 @@ body {
     transition: transform .12s ease-in-out;
 }
 
+.yap-video:hover > button {
+    opacity: 1;
+    transition: opacity 0.12s ease-in-out;
+}
+
 .yap-video>button {
+    opacity: 0;
     position: absolute;
     right: 0;
     vertical-align: middle;
     transform: translateY(-100%);
+    transition: opacity 0.36s ease-in-out;
 }
 
+
 /*remove the giant play button of videojs*/
+
 .vjs-big-play-button {
     display: none !important;
 }
