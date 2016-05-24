@@ -30,7 +30,7 @@ export class VideoService {
                 this.playVideo(found);
             } else {
                 const video = { fullpath, position: 0 };
-                this.addData(video);
+                this.addDataToRootList(video);
                 this.playVideo(video);
             }
         });
@@ -117,29 +117,26 @@ export class VideoService {
         this.updateEventEmitter.emit(this.data);
     }
 
-    removeVideo(video: Video) {
-        console.log("in service");
-        console.log(video);
+    removeVideoOrList(videoToRemove: Video | VideoList) {
 
-        const index = this.data.indexOf(video);
+        function iter(list: VideoList) {
+            const index = list.videos.indexOf(videoToRemove);
+            if (index > -1) {
+                list.videos.splice(index, 1);
+            } else {
+                list.videos.filter(isVideoList).forEach(iter);
+            }
+        }
+
+        const index = this.data.indexOf(videoToRemove);
         if (index > -1) {
             this.data.splice(index, 1);
         } else {
-            let removed = false;
-            this.data.forEach(x => {
-                if (isVideoList(x)) {
-                    const i = x.videos.indexOf(video);
-                    if (i > -1) {
-                        x.videos.splice(i, 1);
-                        removed = true;
-                    }
-                }
-            });
-            console.log("result of removing", removed);
+            this.data.filter(isVideoList).forEach(iter);
         }
     }
 
-    addData(data: Video | VideoList) {
+    addDataToRootList(data: Video | VideoList) {
         this.data.push(data);
     }
 

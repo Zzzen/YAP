@@ -5,12 +5,7 @@ import {VideoService} from "./video.service";
 
 @Component({
     selector: "yap-video",
-    template: `
-        <div class="yap-video">
-            <a (click)="play()"> {{getFilename(video.fullpath)}} </a>
-            <button (click)="onRemove()" class="btn badge" > X </button>  
-        </div>
-    `
+    templateUrl: "./video.component.html"
 })
 export class VideoComponent {
     @Input()
@@ -21,7 +16,7 @@ export class VideoComponent {
     }
 
     onRemove() {
-        this.videoService.removeVideo(this.video);
+        this.videoService.removeVideoOrList(this.video);
     }
 
     play() {

@@ -7,17 +7,7 @@ import {PlayerComponent} from "./player.component";
 
 @Component({
     selector: "yap-root-list",
-    template: `
-        <yap-player> </yap-player>
-        <div id="rootList" [class.isShown]="isShown" [style.width.px]="width">
-            <div id="handler_vertical" (mousedown)="startDragging()"></div>
-            <ul>
-                <li *ngFor="let x of data">
-                    <yap-item [data]="x"> </yap-item> 
-                </li>
-            </ul>
-        </div>
-    `,
+    templateUrl: "./root-list.component.html",
     directives: [TreeviewItemComponent, PlayerComponent],
     providers: [VideoService]
 })

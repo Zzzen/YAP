@@ -3,17 +3,11 @@ import * as $ from "jquery";
 
 import {VideoList} from "./models";
 import {TreeviewItemComponent}  from "./treeview-item.component";
+import {VideoService} from "./video.service";
 
 @Component({
     selector: "yap-video-list",
-    template: `
-        <a (click)="toggle()" > <span>{{isExpanded? "▼": "▲"}}</span> {{videoList.name}} </a>
-        <ul class="yap-video-list">
-            <li  *ngFor="let x of videoList.videos">
-                <yap-item [data]="x"> </yap-item>            
-            </li>
-        </ul>
-    `,
+    templateUrl: "./video-list.component.html",
     directives: [forwardRef(() => TreeviewItemComponent)]
 })
 export class VideoListComponent {
@@ -22,11 +16,15 @@ export class VideoListComponent {
 
     isExpanded = true;
 
-    constructor(private elementRef: ElementRef) {
+    constructor(private elementRef: ElementRef, private videoService: VideoService) {
     }
 
     toggle() {
         this.isExpanded = !this.isExpanded;
-        $(this.elementRef.nativeElement).children("ul").toggle("fast");
+        $(this.elementRef.nativeElement).children().children("ul").toggle("fast");
+    }
+
+    onRemove() {
+        this.videoService.removeVideoOrList(this.videoList);
     }
 }

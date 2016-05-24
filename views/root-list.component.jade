@@ -1,0 +1,7 @@
+yap-player
+
+#rootList( [class.isShown]="isShown", [style.width.px]="width" )
+    #handler_vertical( (mousedown)="startDragging()" )
+    ul
+        li( *ngFor="let x of data" )
+            yap-item( [data]="x" )

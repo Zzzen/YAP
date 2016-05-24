@@ -67,17 +67,16 @@ body {
     transition: transform .12s ease-in-out;
 }
 
-.yap-video:hover > button {
+.closeButtonParent:hover > button {
     opacity: 1;
     transition: opacity 0.12s ease-in-out;
 }
 
-.yap-video>button {
+.closeButtonParent>button {
     opacity: 0;
     position: absolute;
     right: 0;
     vertical-align: middle;
-    transform: translateY(-100%);
     transition: opacity 0.36s ease-in-out;
 }
 

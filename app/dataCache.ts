@@ -20,7 +20,7 @@ export class DataCache {
 
     public addData(data: Video | VideoList) {
         if (this.videoService) {
-            this.videoService.addData(data);
+            this.videoService.addDataToRootList(data);
         } else {
             this.tmp.push(data);
         }

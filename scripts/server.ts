@@ -17,7 +17,7 @@ export const server = http.createServer((req, res) => {
 
 <body>
   <video id="my-video" class="video-js" controls preload="auto" width="640" height="264" data-setup="{}">
-    <source src="http://localhost:8080/?path=E:/1.mp4" type='video/mp4'>
+    <source src="http://localhost:8080/?path=E:\\1.flv" type='video/x-flv'>
     <p class="vjs-no-js">
       To view this video please enable JavaScript, and consider upgrading to a web browser that
       <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
@@ -29,8 +29,6 @@ export const server = http.createServer((req, res) => {
         return;
     }
 
-    fs.readdir(".");
-
     fs.stat(query.path, (err, stats) => {
         if (err) {
             console.log("fail to read file stat", err);
@@ -40,8 +38,16 @@ export const server = http.createServer((req, res) => {
             const range: string = req.headers.range;
 
             if (!range) {
-                res.setHeader("Content-Length", String(stats.size));
-                res.setHeader('Content-disposition', 'attachment; filename=' + "cao.flv");
+                const start = 0;
+                const total = stats.size;
+                const end = total - 1;
+                const chunksize = (end - start) + 1;
+
+                res.writeHead(206, {
+                    "Accept-Ranges": "bytes",
+                    "Content-Length": chunksize,
+                    "Content-Type": "video/x-flv"
+                });
 
                 const stream = fs.createReadStream(query.path);
                 stream.pipe(res);
@@ -56,7 +62,7 @@ export const server = http.createServer((req, res) => {
                     "Content-Range": "bytes " + start + "-" + end + "/" + total,
                     "Accept-Ranges": "bytes",
                     "Content-Length": chunksize,
-                    "Content-Type": "video/mp4"
+                    "Content-Type": "video/x-flv"
                 });
 
                 const stream = fs.createReadStream(query.path, { start: start, end: end })
