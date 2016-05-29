@@ -1,20 +1,18 @@
 import {Injectable, EventEmitter} from "@angular/core";
-import {ipcRenderer, remote} from "electron";
+import {ipcRenderer} from "electron";
 import path = require("path");
 import {Stats} from "fs";
 
-import {Video, VideoList, VideoOrVideoList, RootList, isVideoList, isVideo} from "./models";
+import {Video, VideoList, VideoOrVideoList, RootList, isVideoList, isVideo, isUsefulList} from "./models";
 import {getUserData, writeUserData} from "./userData";
 import {readDir, stat} from "./promisifiedNode";
-
+import {SUPPORTED_FORMAT} from "./config";
 
 @Injectable()
 export class VideoService {
     private data: RootList;
 
-    private forceQuit = false;
-
-    public updateEventEmitter = new EventEmitter() as EventEmitter<(Video | VideoList)[]>;
+    public updateEventEmitter = new EventEmitter<RootList>();
 
     public playingChange = new EventEmitter() as EventEmitter<Video>;
 
@@ -38,7 +36,6 @@ export class VideoService {
 
         ipcRenderer.on("openDir", (event: any, dirpath: string) => { this.onDirOpen(dirpath); });
 
-        window.onbeforeunload = event => { this.onWindowClose(event); };
 
         // read data from config file
         (async () => {
@@ -53,7 +50,7 @@ export class VideoService {
     async onDirOpen(dirpath: string) {
         async function createVideoListFromDir(currentDir: string): Promise<VideoList> {
             try {
-                console.log("currentDir: " + currentDir);
+                // console.log("currentDir: " + currentDir);
 
                 const videoList: VideoList = {
                     name: currentDir,
@@ -71,10 +68,14 @@ export class VideoService {
                 for (let i = 0; i < statses.length; i++) {
                     const stats = statses[i];
                     if (stats.isFile()) {
-                        videoList.videos.push({ fullpath: path.join(currentDir, files[i]), position: 0 });
+                        if (SUPPORTED_FORMAT.map(x => `.${x}`).indexOf(path.extname(files[i]).toLowerCase()) > -1) {
+                            videoList.videos.push({ fullpath: path.join(currentDir, files[i]), position: 0 });
+                        }
                     } else {
                         const innerList = await createVideoListFromDir(path.join(currentDir, files[i]));
-                        videoList.videos.push(innerList);
+                        if (isUsefulList(innerList)) {
+                            videoList.videos.push(innerList);
+                        }
                     }
                 }
 
@@ -91,22 +92,9 @@ export class VideoService {
         }
     }
 
-    async onWindowClose(event: BeforeUnloadEvent) {
-        if (this.forceQuit) {
-            event.returnValue = true;
-        } else {
-            this.forceQuit = true;
-
-            event.returnValue = false;
-            remote.getCurrentWindow().hide();
-
-            try {
-                await writeUserData(this.data);
-            } finally {
-                window.close();
-            }
-        }
-    };
+    async saveData() {
+        return await writeUserData(this.data);
+    }
 
     getData() {
         return Promise.resolve(this.data);

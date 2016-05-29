@@ -35,6 +35,10 @@ body {
     transition: visibility 0s 0s linear, opacity .36s ease-out, transform .36s ease-out;
 }
 
+#rootList ul{
+    position: relative;
+}
+
 #handler_vertical {
     z-index: 200;
     width: 8px;

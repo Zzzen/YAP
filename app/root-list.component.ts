@@ -1,4 +1,5 @@
 import {Component, OnInit} from "@angular/core";
+import {remote} from "electron";
 
 import {TreeviewItemComponent} from "./treeview-item.component";
 import {Video, VideoList} from "./models";
@@ -17,6 +18,8 @@ export class RootListComponent implements OnInit {
 
     isDragging = false;
 
+    forceQuit = false;
+
     width = 350;
 
     isVideoList(arg: any): arg is VideoList {
@@ -31,12 +34,31 @@ export class RootListComponent implements OnInit {
         this.isDragging = false;
     }
 
+    async onWindowClose(event: BeforeUnloadEvent) {
+        if (this.forceQuit) {
+            event.returnValue = true;
+        } else {
+            this.forceQuit = true;
+
+            event.returnValue = false;
+            remote.getCurrentWindow().hide();
+
+            try {
+                await this.videoService.saveData();
+            } finally {
+                window.close();
+            }
+        }
+    };
+
     ngOnInit() {
         this.getData();
 
         const element = document.getElementById("rootList");
 
         window.onmouseup = () => this.stopDragging();
+
+        window.onbeforeunload = event => { this.onWindowClose(event); };
 
         window.onmousemove = (event) => {
             if (this.isDragging) {
