@@ -1,16 +1,17 @@
 import {Component, OnInit} from "@angular/core";
-import {remote} from "electron";
+// import {remote} from "electron";
 
 import {TreeviewItemComponent} from "./treeview-item.component";
-import {Video, VideoList} from "./models";
+import {Video, VideoList, Preference} from "./models";
 import {VideoService} from "./video.service";
 import {PlayerComponent} from "./player.component";
+import {PreferenceService} from "./preference.service";
 
 @Component({
     selector: "yap-root-list",
     templateUrl: "./root-list.component.html",
     directives: [TreeviewItemComponent, PlayerComponent],
-    providers: [VideoService]
+    providers: [VideoService, PreferenceService]
 })
 export class RootListComponent implements OnInit {
     data = [] as (Video | VideoList)[];
@@ -20,7 +21,7 @@ export class RootListComponent implements OnInit {
 
     forceQuit = false;
 
-    width = 350;
+    preference: Preference;
 
     isVideoList(arg: any): arg is VideoList {
         return !!arg.videos;
@@ -39,12 +40,13 @@ export class RootListComponent implements OnInit {
             event.returnValue = true;
         } else {
             this.forceQuit = true;
+            event.preventDefault();
 
-            event.returnValue = false;
-            remote.getCurrentWindow().hide();
+            // remote.getCurrentWindow().hide();
 
             try {
                 await this.videoService.saveData();
+                await this.preferenceService.writePreference();
             } finally {
                 window.close();
             }
@@ -60,17 +62,18 @@ export class RootListComponent implements OnInit {
 
         window.onbeforeunload = event => { this.onWindowClose(event); };
 
-        window.onmousemove = (event) => {
+        window.addEventListener("mousemove", (event) => {
             if (this.isDragging) {
-                this.width -= event.movementX;
+                this.preference.widthOfPlayList -= event.movementX;
             }
             this.isShown = this.isDragging ||
                 (this.isShown && window.innerWidth - event.clientX - 30 < element.offsetWidth) ||
                 (window.innerWidth - event.clientX - 30 < element.offsetWidth && event.clientY < 0.8 * window.innerHeight);
-        };
+        });
     }
 
-    constructor(private videoService: VideoService) {
+    constructor(private videoService: VideoService, private preferenceService: PreferenceService) {
+        this.preference = preferenceService.preference;
     }
 
     getData() {

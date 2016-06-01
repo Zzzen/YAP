@@ -10,6 +10,8 @@ export interface VideoList {
 
 export interface Preference {
     widthOfPlayList: number;
+    widthOfWindow: number;
+    heightOfWindow: number;
 }
 
 export type VideoOrVideoList = Video | VideoList;

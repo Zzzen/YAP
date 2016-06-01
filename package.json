@@ -15,7 +15,7 @@
   "author": "Zen",
   "license": "WTFPL",
   "devDependencies": {
-    "electron-prebuilt": "^1.0.2"
+    "electron-prebuilt": "^1.2.0"
   },
   "dependencies": {
     "@angular/common": "2.0.0-rc.1",
@@ -27,6 +27,7 @@
     "@angular/router": "2.0.0-rc.1",
     "@angular/router-deprecated": "2.0.0-rc.1",
     "@angular/upgrade": "2.0.0-rc.1",
+    "electron-prebuilt": "^1.2.0",
     "es6-shim": "^0.35.1",
     "gulp": "^3.9.1",
     "gulp-jade": "^1.1.0",
@@ -35,7 +36,7 @@
     "jquery": "^2.2.4",
     "reflect-metadata": "^0.1.3",
     "rxjs": "^5.0.0-beta.7",
-    "videojs": "^1.0.0",
+    "wcjs-player": "*",
     "zone.js": "^0.6.12"
   }
 }

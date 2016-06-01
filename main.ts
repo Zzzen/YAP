@@ -1,11 +1,26 @@
 import {app, BrowserWindow, Menu} from "electron";
 
 import {template as menuTemplate} from "./scripts/menuTemplate";
+import {readFileAsString} from "./app/promisifiedNode";
+import {Preference} from "./app/models";
 
 let mainWindow: Electron.BrowserWindow = undefined;
 
-function createWindow() {
-    mainWindow = new BrowserWindow({ width: 800, height: 600 });
+async function createWindow() {
+
+    let width = 800;
+    let height = 600;
+
+    try {
+        const str = await readFileAsString("./preference.json");
+        const pref: Preference = JSON.parse(str);
+        width = pref.widthOfWindow;
+        height = pref.heightOfWindow;
+    } catch (err) {
+        console.log(err);
+    }
+
+    mainWindow = new BrowserWindow({ width, height });
 
     mainWindow.loadURL("file://" + __dirname + "/views/index.html");
 

@@ -1,6 +1,6 @@
 yap-player
 
-#rootList( [class.isShown]="isShown", [style.width.px]="width" )
+#rootList( [class.isShown]="isShown", [style.width.px]="preference.widthOfPlayList" )
     ul
         #handler_vertical( (mousedown)="startDragging()" )
         li( *ngFor="let x of data" )

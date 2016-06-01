@@ -3,10 +3,12 @@ import {Component, ElementRef, OnInit, OnDestroy} from "@angular/core";
 import {VideoService} from "./video.service";
 import {Video} from "./models";
 
+const wcjs: any = require("wcjs-player");
+
 @Component({
     selector: "yap-player",
     template: `
-        <video controls class="video-js vjs-default-skin" id="player" (timeupdate)="onTimeUpdate()"> </video>
+        <div id="player"> </div>
     `
 })
 export class PlayerComponent implements OnInit, OnDestroy {
@@ -14,7 +16,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
     subscription: any;
 
-    jsPlayer: VideoJSPlayer;
+    player: any;
 
     private currentVideo: Video;
 
@@ -24,7 +26,8 @@ export class PlayerComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.jsPlayer = videojs("player");
+        this.player = new wcjs("#player").addPlayer({ autoplay: true });
+        this.player.onTime((time: number) => this.onTimeUpdate(time));
 
         this.subscription = this.videoService.playingChange.subscribe((video: Video) => { this.playVideo(video); });
     }
@@ -33,11 +36,11 @@ export class PlayerComponent implements OnInit, OnDestroy {
         if (video === this.currentVideo) {
             return;
         } else {
-            const url = "file://" + video.fullpath.replace(/\\/g, "/");
+            const url = "file:///" + video.fullpath.replace(/\\/g, "/");
             this.currentVideo = video;
-            this.jsPlayer.src(url);
-            this.jsPlayer.currentTime(video.position);
-            this.jsPlayer.play();
+
+            this.player.vlc.play(url);
+            this.player.time(video.position);
         }
     }
 
@@ -45,9 +48,9 @@ export class PlayerComponent implements OnInit, OnDestroy {
         this.subscription.unsubscribe();
     }
 
-    onTimeUpdate() {
+    onTimeUpdate(milliseconds: number) {
         if (this.currentVideo) {
-            this.currentVideo.position = this.jsPlayer.currentTime();
+            this.currentVideo.position = milliseconds;
         }
     }
 }

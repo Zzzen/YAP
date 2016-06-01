@@ -1,1 +1,1 @@
-export const SUPPORTED_FORMAT = ["avi", "webm", "ogg", "mp3", "mp4"];
+export const SUPPORTED_FORMAT = ["avi", "webm", "ogg", "mp3", "mp4", "flv", "mkv", "wmv", "rm", "rmvb", "mpeg"];
