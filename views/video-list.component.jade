@@ -1,5 +1,5 @@
 .listContainer
-    div.closeButtonParent( (click)="toggle()" ) {{ (isExpanded? "▼": "▲") + videoList.name}}
+    div.closeButtonParent.noOverflow( (click)="toggle()" ) {{ (isExpanded? "▼": "▲") + videoList.name}}
         button.btn.badge( (click)="onRemove()") X
 
     ul.yap-video-list

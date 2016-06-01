@@ -20,8 +20,6 @@ export class VideoService {
         this.data = [];
 
         ipcRenderer.on("openVideo", (event: any, fullpath: string) => {
-            console.log(fullpath);
-
             const found = this.findVideo(fullpath);
 
             if (found) {
@@ -86,8 +84,18 @@ export class VideoService {
             }
         }
 
+        function removeRedundantPath(list: VideoList) {
+            list.videos.forEach(x => {
+                if (isVideoList(x)) {
+                    removeRedundantPath(x);
+                    x.name = x.name.replace(list.name + "\\", "");
+                }
+            });
+        }
+
         const videoList = await createVideoListFromDir(dirpath);
         if (videoList) {
+            removeRedundantPath(videoList);
             this.data.push(videoList);
         }
     }

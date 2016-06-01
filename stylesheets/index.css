@@ -35,7 +35,7 @@ body {
     transition: visibility 0s 0s linear, opacity .36s ease-out, transform .36s ease-out;
 }
 
-#rootList ul{
+#rootList ul {
     position: relative;
 }
 
@@ -84,9 +84,14 @@ body {
     transition: opacity 0.36s ease-in-out;
 }
 
+.noOverflow {
+    overflow-x: hidden;
+    white-space: nowrap;
+}
 
-/*remove the giant play button of videojs*/
 
-.vjs-big-play-button {
-    display: none !important;
+/* hide buffing status and etc */
+.wcp-status, .wcp-titlebar{
+    display: node;
+    visibility: hidden;   
 }
