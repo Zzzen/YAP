@@ -1,5 +1,5 @@
 import {BrowserWindow, dialog} from "electron";
-
+import {SUPPORTED_FORMAT} from "../app/config";
 
 export let template: Electron.MenuItemOptions[] = [
     {
@@ -9,7 +9,7 @@ export let template: Electron.MenuItemOptions[] = [
                 label: "File",
                 accelerator: "CmdOrCtrl+O",
                 click: (item: Electron.MenuItem, focusedWindow: Electron.BrowserWindow) => {
-                    const options = { filters: [{ name: "视频文件", extensions: ["avi", "mp4", "mpg"] }] };
+                    const options = { filters: [{ name: "视频文件", extensions: SUPPORTED_FORMAT }] };
                     dialog.showOpenDialog(options, (filenames) => {
                         if (filenames) {
                             focusedWindow.webContents.send("openVideo", filenames[0]);

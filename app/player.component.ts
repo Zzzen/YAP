@@ -36,10 +36,9 @@ export class PlayerComponent implements OnInit, OnDestroy {
         if (video === this.currentVideo) {
             return;
         } else {
-            const url = "file:///" + video.fullpath.replace(/\\/g, "/");
             this.currentVideo = video;
 
-            this.player.vlc.play(url);
+            this.player.vlc.play(video.fullpath);
             this.player.time(video.position);
         }
     }

@@ -67,7 +67,8 @@ export class VideoService {
                     const stats = statses[i];
                     if (stats.isFile()) {
                         if (SUPPORTED_FORMAT.map(x => `.${x}`).indexOf(path.extname(files[i]).toLowerCase()) > -1) {
-                            videoList.videos.push({ fullpath: path.join(currentDir, files[i]), position: 0 });
+                            const url = "file:///" + path.join(currentDir, files[i]).replace(/\\/g, "/");
+                            videoList.videos.push({ fullpath: url, position: 0 });
                         }
                     } else {
                         const innerList = await createVideoListFromDir(path.join(currentDir, files[i]));
