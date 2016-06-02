@@ -1,5 +1,6 @@
 import { bootstrap }    from '@angular/platform-browser-dynamic';
 
-import {RootListComponent} from "./root-list.component";
+import {AppComponent} from "./app.component";
 
-bootstrap(RootListComponent);
+
+bootstrap(AppComponent);

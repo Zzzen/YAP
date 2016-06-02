@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, OnDestroy} from "@angular/core";
+import {Component, ElementRef, OnInit, OnDestroy, Input} from "@angular/core";
 
 import {VideoService} from "./video.service";
 import {Video} from "./models";
@@ -8,11 +8,14 @@ const wcjs: any = require("wcjs-player");
 @Component({
     selector: "yap-player",
     template: `
-        <div id="player"> </div>
+        <div id="player" [class.isHidden]="focusSetting" > </div>
     `
 })
 export class PlayerComponent implements OnInit, OnDestroy {
     // rawPlayer: HTMLVideoElement;
+
+    @Input()
+    focusSetting: boolean;
 
     subscription: any;
 

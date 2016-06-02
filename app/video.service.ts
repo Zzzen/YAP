@@ -25,6 +25,7 @@ export class VideoService {
             if (found) {
                 this.playVideo(found);
             } else {
+                fullpath = "file:///" + fullpath.replace(/\\/g, "/");
                 const video = { fullpath, position: 0 };
                 this.addDataToRootList(video);
                 this.playVideo(video);

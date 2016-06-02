@@ -3,12 +3,29 @@ body {
     overflow: hidden;
 }
 
-#player {
+#player,
+#setting {
     position: absolute;
     left: 0px;
     top: 0px;
     width: 100%;
     height: 100%;
+    transition: transform .40s ease;
+}
+
+#player.isHidden {
+    transform: translateY(100%);
+    transition: transform .40s ease;
+}
+
+#setting {
+    transform: translateY(-100%);
+    transition: transform .40s ease;
+}
+
+#setting.isShown {
+    transform: translateY(0%);
+    transition: transform .40s ease;
 }
 
 #rootList {
@@ -91,7 +108,9 @@ body {
 
 
 /* hide buffing status and etc */
-.wcp-status, .wcp-titlebar{
+
+.wcp-status,
+.wcp-titlebar {
     display: node;
-    visibility: hidden;   
+    visibility: hidden;
 }

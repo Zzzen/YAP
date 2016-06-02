@@ -1,21 +1,22 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit, Input} from "@angular/core";
 // import {remote} from "electron";
 
 import {TreeviewItemComponent} from "./treeview-item.component";
 import {Video, VideoList, Preference} from "./models";
 import {VideoService} from "./video.service";
-import {PlayerComponent} from "./player.component";
 import {PreferenceService} from "./preference.service";
 
 @Component({
     selector: "yap-root-list",
     templateUrl: "./root-list.component.html",
-    directives: [TreeviewItemComponent, PlayerComponent],
-    providers: [VideoService, PreferenceService]
+    directives: [TreeviewItemComponent]
 })
 export class RootListComponent implements OnInit {
     data = [] as (Video | VideoList)[];
     isShown = true;
+
+    @Input()
+    focusSetting: boolean;
 
     isDragging = false;
 

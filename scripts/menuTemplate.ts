@@ -30,6 +30,17 @@ export let template: Electron.MenuItemOptions[] = [
             }]
     },
     {
+        label: "Setting",
+        submenu: [
+            {
+                label: "Preferences",
+                click: (item: Electron.MenuItem, focusedWindow: Electron.BrowserWindow) => {
+                    focusedWindow.webContents.send("openSetting");
+                }
+            }
+        ]
+    },
+    {
         label: "View",
         submenu: [
             {
