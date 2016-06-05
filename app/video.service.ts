@@ -19,21 +19,34 @@ export class VideoService {
     constructor() {
         this.data = [];
 
-        ipcRenderer.on("openVideo", (event: any, fullpath: string) => {
-            const found = this.findVideo(fullpath);
-
-            if (found) {
-                this.playVideo(found);
-            } else {
-                fullpath = "file:///" + fullpath.replace(/\\/g, "/");
-                const video = { fullpath, position: 0 };
-                this.addDataToRootList(video);
-                this.playVideo(video);
-            }
-        });
-
+        ipcRenderer.on("openVideo", (event: any, fullpath: string) => { this.onFileOpen(fullpath); });
 
         ipcRenderer.on("openDir", (event: any, dirpath: string) => { this.onDirOpen(dirpath); });
+
+
+        document.addEventListener('dragover', event => event.preventDefault());
+
+        document.addEventListener('drop', event => {
+            event.preventDefault();
+
+            const path = event.dataTransfer.files[0].path;
+
+            (async () => {
+                try {
+                    const stats = await stat(path);
+
+                    if (stats.isFile()) {
+                        this.onFileOpen(path);
+                    } else {
+                        this.onDirOpen(path);
+                    }
+                } catch (err) {
+                    console.log(err);
+                }
+            })();
+
+
+        }, false);
 
 
         // read data from config file
@@ -44,6 +57,24 @@ export class VideoService {
                 this.data = [];
             }
         })();
+    }
+
+    async onFileOpen(fullpath: string) {
+        fullpath = "file:///" + fullpath.replace(/\\/g, "/");
+
+        if (SUPPORTED_FORMAT.map(x => `.${x}`).indexOf(path.extname(fullpath)) < 0) {
+            return;
+        }
+
+        const found = this.findVideo(fullpath);
+
+        if (found) {
+            this.playVideo(found);
+        } else {
+            const video = { fullpath, position: 0 };
+            this.addDataToRootList(video);
+            this.playVideo(video);
+        }
     }
 
     async onDirOpen(dirpath: string) {
@@ -151,7 +182,6 @@ export class VideoService {
     }
 
     playVideo(video: Video) {
-        console.log(this.data);
         this.playingChange.emit(video);
     }
 }

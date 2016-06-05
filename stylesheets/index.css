@@ -107,10 +107,9 @@ body {
 }
 
 
-/* hide buffing status and etc */
-
-.wcp-status,
-.wcp-titlebar {
+/* hide buffing status */
+.wcp-status {
     display: node;
     visibility: hidden;
+    pointer-events: none;
 }

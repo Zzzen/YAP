@@ -69,7 +69,7 @@ export class RootListComponent implements OnInit {
             }
             this.isShown = this.isDragging ||
                 (this.isShown && window.innerWidth - event.clientX - 30 < element.offsetWidth) ||
-                (window.innerWidth - event.clientX - 30 < element.offsetWidth && event.clientY < 0.8 * window.innerHeight);
+                (window.innerWidth - event.clientX - 30 < element.offsetWidth && event.clientY < 0.4 * window.innerHeight);
         });
     }
 
