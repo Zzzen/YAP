@@ -46,10 +46,17 @@ export class RootListComponent implements OnInit {
             // remote.getCurrentWindow().hide();
 
             try {
-                await this.videoService.saveData();
-                await this.preferenceService.writePreference();
-            } finally {
+                // doesn't work?
+
+                // await this.videoService.saveData();
+                // await this.preferenceService.writePreference();
+
+                await Promise.all([this.videoService.saveData(), this.preferenceService.writePreference()]);
+
                 window.close();
+            } catch (err) {
+                console.log(err);
+            } finally {
             }
         }
     };

@@ -10,17 +10,20 @@ async function createWindow() {
 
     let width = 800;
     let height = 600;
+    let maximized = false;
 
     try {
         const str = await readFileAsString("./preference.json");
         const pref: Preference = JSON.parse(str);
         width = pref.widthOfWindow;
         height = pref.heightOfWindow;
+        maximized = pref.maximized;
     } catch (err) {
         console.log(err);
     }
 
     mainWindow = new BrowserWindow({ width, height });
+    if (maximized) { mainWindow.maximize(); }
 
     mainWindow.loadURL("file://" + __dirname + "/views/index.html");
 

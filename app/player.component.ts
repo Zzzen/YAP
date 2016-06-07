@@ -3,6 +3,7 @@ import {remote} from "electron";
 import $ = require("jquery");
 
 import {VideoService} from "./video.service";
+import {PreferenceService} from "./preference.service";
 import {Video} from "./models";
 
 const wcjs: any = require("wcjs-player");
@@ -27,7 +28,8 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
     constructor(
         private element: ElementRef,
-        private videoService: VideoService) {
+        private videoService: VideoService,
+        private preferenceService: PreferenceService) {
     }
 
     private initKeyboardListener() {
@@ -79,6 +81,12 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
         this.initPlayer();
 
+        this.player.onEnded(() => {
+            this.currentVideo.position = 0;
+
+            const next = this.videoService.getNearbyVideos(this.currentVideo).next;
+            if (next) { this.playVideo(next); }
+        });
 
         this.player.onTime((time: number) => this.onTimeUpdate(time));
 
@@ -92,6 +100,21 @@ export class PlayerComponent implements OnInit, OnDestroy {
         });
 
         const $wcpSurface = $(".wcp-surface");
+        $wcpSurface[0].addEventListener("wheel", event => {
+            const before: number = this.player.volume();
+            const after: number = before + 10 * (event.deltaY > 0 ? -1 : 1);
+
+            this.player.volume(after);
+        });
+
+        this.preferenceService.updateEmitter.subscribe(() => {
+            this.player.volume(this.preferenceService.preference.volume);
+        });
+
+        this.player.onVolume((newValue: number) => {
+            this.preferenceService.preference.volume = newValue;
+        });
+
         // toggle fullscreen when dblclick
         $wcpSurface.unbind("dblclick");
         $wcpSurface.dblclick(event => {
@@ -111,11 +134,11 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
         let timerId = window.setTimeout(hideTitle, 3000);
         $wcpSurface.unbind("mousemove");
+        const $titleBar = $(".wcp-titlebar");
         $wcpSurface.mousemove(event => {
             window.clearTimeout(timerId);
             timerId = window.setTimeout(hideTitle, 3000);
 
-            const $titleBar = $(".wcp-titlebar");
             if (!$titleBar.is(":visible")) {
                 $titleBar.fadeIn("slow");
             }

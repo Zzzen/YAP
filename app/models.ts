@@ -12,6 +12,8 @@ export interface Preference {
     widthOfPlayList: number;
     widthOfWindow: number;
     heightOfWindow: number;
+    maximized: boolean;
+    volume: number;
 }
 
 export type VideoOrVideoList = Video | VideoList;

@@ -59,21 +59,40 @@ export class VideoService {
         })();
     }
 
+    getFlattenData(): Video[] {
+        function getVideo(x: VideoOrVideoList): Video[] {
+            if (isVideo(x)) {
+                return [x];
+            } else {
+                return x.videos.map(getVideo).reduce((prev, curr) => prev.concat(curr), []);
+            }
+        }
+
+        return this.data.map(getVideo).reduce((prev, curr) => prev.concat(curr), []);
+    }
+
+    // prev and next may be undefined.
+    getNearbyVideos(current: Video) {
+        const flatten = this.getFlattenData();
+        return {
+            prev: flatten[flatten.indexOf(current) - 1],
+            next: flatten[flatten.indexOf(current) + 1]
+        };
+    }
+
     async onFileOpen(fullpath: string) {
         fullpath = "file:///" + fullpath.replace(/\\/g, "/");
 
-        if (SUPPORTED_FORMAT.map(x => `.${x}`).indexOf(path.extname(fullpath)) < 0) {
-            return;
-        }
+        if (SUPPORTED_FORMAT.map(x => `.${x}`).indexOf(path.extname(fullpath)) > -1) {
+            const found = this.findVideo(fullpath);
 
-        const found = this.findVideo(fullpath);
-
-        if (found) {
-            this.playVideo(found);
-        } else {
-            const video = { fullpath, position: 0 };
-            this.addDataToRootList(video);
-            this.playVideo(video);
+            if (found) {
+                this.playVideo(found);
+            } else {
+                const video = { fullpath, position: 0 };
+                this.addDataToRootList(video);
+                this.playVideo(video);
+            }
         }
     }
 

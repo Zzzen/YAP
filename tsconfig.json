@@ -6,7 +6,9 @@
         "noImplicitAny": true,
         "noFallthroughCasesInSwitch": true,
         "experimentalDecorators": true,
-        "emitDecoratorMetadata": true
+        "emitDecoratorMetadata": true,
+        "noImplicitReturns": true,
+        "pretty": true
     },
     "exclude": [
         "node_modules",
