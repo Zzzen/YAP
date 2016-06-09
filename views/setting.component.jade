@@ -1,2 +1,21 @@
 #setting( [class.isShown]="focusSetting" )
-    button( (click)="onExitClicked()" ) Exit
+    #settingInner
+        table.table
+            tbody
+                tr
+                    td background color of playlist
+                    td
+                        input(type="color", [(ngModel)]="preferenceService.preference.backgroundColorOfPlaylist")
+                tr
+                    td transparency of playlist ( 0.0 ~ 1.0 )
+                    td
+                        input(type="range", [(ngModel)]="preferenceService.preference.backgroundOpacityOfPlaylist", min="0.0", max="1.0", step="0.001")
+                tr
+                    td font size (10 ~ 25)
+                    td
+                        input(type="range", [(ngModel)]="preferenceService.preference.fontSize", min="10", max="25", step="1")
+                tr
+                    td font color
+                    td
+                        input(type="color", [(ngModel)]="preferenceService.preference.fontColor")
+        button.btn.btn-default.exitButton( (click)="onExitClicked()" ) Exit

@@ -14,6 +14,10 @@ export interface Preference {
     heightOfWindow: number;
     maximized: boolean;
     volume: number;
+    backgroundColorOfPlaylist: string;
+    backgroundOpacityOfPlaylist: number;
+    fontSize: number;
+    fontColor: string;
 }
 
 export type VideoOrVideoList = Video | VideoList;

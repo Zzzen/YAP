@@ -6,15 +6,22 @@ import {Preference} from "./models";
 
 @Injectable()
 export class PreferenceService {
-    updateEmitter = new EventEmitter<Preference>();
 
-    preference: Preference = {
+    static DEFAULT_PREFERENCE: Preference = {
         widthOfPlayList: 350,
         widthOfWindow: 800,
         heightOfWindow: 600,
         maximized: false,
-        volume: 100
+        volume: 100,
+        backgroundColorOfPlaylist: "#e0922b",
+        backgroundOpacityOfPlaylist: 0.8,
+        fontSize: 15,
+        fontColor: "#337ab7"
     };
+
+    updateEmitter = new EventEmitter<Preference>();
+
+    preference: Preference = Object.assign({}, PreferenceService.DEFAULT_PREFERENCE);
 
     constructor() {
         const currentWindow = remote.getCurrentWindow();
@@ -49,5 +56,9 @@ export class PreferenceService {
 
     async writePreference() {
         return writeStringToFile("preference.json", JSON.stringify(this.preference, undefined, 4));
+    }
+
+    resetPreference() {
+        this.preference = Object.assign({}, PreferenceService.DEFAULT_PREFERENCE);
     }
 }

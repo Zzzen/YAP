@@ -4,6 +4,7 @@ import * as $ from "jquery";
 import {VideoList} from "./models";
 import {TreeviewItemComponent}  from "./treeview-item.component";
 import {VideoService} from "./video.service";
+import {PreferenceService} from "./preference.service";
 
 @Component({
     selector: "yap-video-list",
@@ -16,7 +17,7 @@ export class VideoListComponent {
 
     isExpanded = true;
 
-    constructor(private elementRef: ElementRef, private videoService: VideoService) {
+    constructor(private elementRef: ElementRef, private videoService: VideoService, private preferenceService: PreferenceService) {
     }
 
     toggle() {

@@ -29,22 +29,24 @@ export class VideoService {
         document.addEventListener('drop', event => {
             event.preventDefault();
 
-            const path = event.dataTransfer.files[0].path;
+            if (event.dataTransfer.files && event.dataTransfer.files[0]) {
 
-            (async () => {
-                try {
-                    const stats = await stat(path);
+                const path = event.dataTransfer.files[0].path;
 
-                    if (stats.isFile()) {
-                        this.onFileOpen(path);
-                    } else {
-                        this.onDirOpen(path);
+                (async () => {
+                    try {
+                        const stats = await stat(path);
+
+                        if (stats.isFile()) {
+                            this.onFileOpen(path);
+                        } else {
+                            this.onDirOpen(path);
+                        }
+                    } catch (err) {
+                        console.log(err);
                     }
-                } catch (err) {
-                    console.log(err);
-                }
-            })();
-
+                })();
+            }
 
         }, false);
 

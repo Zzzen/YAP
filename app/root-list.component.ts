@@ -90,4 +90,9 @@ export class RootListComponent implements OnInit {
         });
     }
 
+    getRgbaString() {
+        const [r, g, b] = this.preferenceService.preference.backgroundColorOfPlaylist.match(/[^#]{2}/g).map(x => Number.parseInt(x, 16));
+        const a = this.preferenceService.preference.backgroundOpacityOfPlaylist;
+        return `rgba(${r}, ${g}, ${b}, ${a})`;
+    }
 }

@@ -1,4 +1,4 @@
-#rootList( [class.isShown]="isShown && !focusSetting", [style.width.px]="preference.widthOfPlayList" )
+#rootList( [class.isShown]="isShown && !focusSetting", [style.width.px]="preference.widthOfPlayList", [style.background-color]="getRgbaString()" )
     ul
         #handler_vertical( (mousedown)="startDragging()" )
         li( *ngFor="let x of data" )

@@ -2,6 +2,7 @@ import {Component, Input} from "@angular/core";
 
 import {Video} from "./models";
 import {VideoService} from "./video.service";
+import {PreferenceService} from "./preference.service";
 
 @Component({
     selector: "yap-video",
@@ -11,7 +12,7 @@ export class VideoComponent {
     @Input()
     video: Video;
 
-    constructor(private videoService: VideoService) {
+    constructor(private videoService: VideoService, private preferenceService: PreferenceService) {
 
     }
 

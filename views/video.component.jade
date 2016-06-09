@@ -1,3 +1,3 @@
 .yap-video
-    a.closeButtonParent( (click)="play()" ) {{getFilename(video.fullpath)}}
+    a.closeButtonParent( (click)="play()", [style.font-size.px]="preferenceService.preference.fontSize", [style.color]="preferenceService.preference.fontColor" ) {{getFilename(video.fullpath)}}
         button.btn.badge( (click)="onRemove()" ) X
