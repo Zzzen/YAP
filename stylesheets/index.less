@@ -1,0 +1,240 @@
+@default-out-time: 0.36s;
+@default-in-time: 0.12s;
+
+@setting-time: 0.4s;
+
+.fillingParent{
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+
+body{
+    background-color: black;
+    overflow: hidden;
+
+    #player, #setting{
+        .fillingParent;
+    }
+
+    #player{
+        transform: translateY(0px);
+        transition: transform @setting-time ease-in-out;
+
+        &.isHidden{
+            transform: translateY(100%);
+	        transition: transform @setting-time ease;
+        }
+    }
+
+    #setting{
+        transform: translateY(-100%);
+        transition: transform @setting-time ease;
+
+        &.isShown{
+            transform: translateY(0%);
+            transition: transform @setting-time ease;
+        }
+
+        #settingInner {
+            max-width: 840px;
+            margin: 0 auto;
+
+            .exitButton {
+                display: block !important;
+                margin: 0 auto;
+                min-width: 150px;
+            }
+        }
+    }
+
+
+    #handler_vertical {
+        z-index: 200;
+        width: 10px;
+        height: 100%;
+        padding: 5px 0;
+        cursor: col-resize;
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin-left: -4px;
+        background-color: cadetblue;
+    }
+
+    #rootList {
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        width: 300px;
+        height: 100%;
+        background-color: rgba(199, 175, 190, 0.79);
+        -webkit-user-select: none;
+        overflow-y: auto;
+        overflow-x: hidden;
+        z-index: 100;
+        /*  Hide  */
+        pointer-events: none;
+        opacity: 0;
+        transform: translateX(300px);
+        transition: visibility 0s @default-in-time linear, opacity @default-in-time ease-in, transform @default-in-time ease-in;
+
+        &.isShown {
+            pointer-events: inherit;
+            opacity: 1;
+            transform: translateX(0px);
+            transition: visibility 0s @default-out-time linear, opacity @default-out-time ease-out, transform @default-out-time ease-out;
+        }
+
+        ul {
+            position: relative;
+        }
+
+
+        .listContainer{
+            > .closeButtonParent{
+                transform: translateX(0px);
+                transition: transform @default-out-time ease-in-out;
+
+                &:hover {
+                    transform: translateX(-20px);
+                    transition: transform @default-in-time ease-in-out;
+                }
+            }
+        }
+
+        .yap-video {
+            position: relative;
+            transform: translateX(0px);
+            transition: transform @default-out-time ease-in-out;
+
+            &:hover{
+                transform: translateX(-20px);
+                transition: transform @default-in-time ease-in-out;
+            }
+        }
+
+        .closeButtonParent{
+            display: block;
+            overflow: hidden;
+            white-space: nowrap;
+            border-width: 4px;
+            border-color: blueviolet;
+            cursor: pointer;
+
+            > button {
+                opacity: 0;
+                position: absolute;
+                right: 0;
+                transform: translateX(20px);
+                vertical-align: middle;
+                transition: opacity @default-out-time ease-in-out;
+            }
+            &:hover> button{
+                opacity: 1;
+                transition: opacity @default-in-time ease-in-out;
+            }
+        }
+    }
+}
+
+
+
+.noOverflow {
+    overflow-x: hidden;
+    white-space: nowrap;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+
+/* Track */
+
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    transition: all 0.36s ease-in-out;
+}
+
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+    border-radius: 12px;
+    background: rgba(71, 144, 208, 0.5);
+    /*box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);*/
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(71, 144, 208, 0.9);
+    box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.4);
+    transition: all 1s ease-in-out;
+}
+
+
+
+/*
+::-webkit-scrollbar-thumb:window-inactive {
+    background: #FF0000;
+    transition: all 0.36s ease-in-out;
+}*/
+
+
+
+/* style range input here */
+input[type=range] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  width: 100%; /* Specific width is required for Firefox. */
+  background: transparent; /* Otherwise white in Chrome */
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+input[type=range]:focus {
+  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border: 1px solid #000000;
+  height: 16px;
+  width: 20px;
+  border-radius: 3px;
+  background: #ffffff;
+  cursor: pointer;
+  margin-top: -5px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+  transition: all 0.3s ease-in-out;
+}
+input[type=range]::-webkit-slider-thumb:active{
+    transform: rotate(90deg);
+    transition: all 0.3s ease-in-out;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; /* Add cool effects to your sliders! */
+}
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  background: #3071a9;
+  border-radius: 1.3px;
+  border: 0.2px solid #010101;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #367ebd;
+}
+
+
+/* hide buffing status */
+
+.wcp-status {
+    display: node;
+    visibility: hidden;
+    pointer-events: none;
+}

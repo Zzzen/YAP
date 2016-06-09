@@ -9,5 +9,7 @@ main.js
 scripts/*.js
 app/*.js
 
+stylesheets/*.css
+
 userData.json
 preference.json
