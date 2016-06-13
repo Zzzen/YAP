@@ -1,0 +1,7 @@
+#searchingTasks( *ngIf="videoService.searchingTasks.length" )
+    div.titleDiv
+        h4 Searching tasks: ( If you find this annoying, you are probably opening a wrong directory. )
+    ol
+        li( *ngFor="let task of videoService.searchingTasks" )
+            button.btn.badge( (click)="videoService.cancelSearchingTask(task)" ) X
+            a {{task.rootDirectory}} --> {{task.currentDirectory}}

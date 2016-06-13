@@ -3,14 +3,16 @@ import {ipcRenderer} from "electron";
 import path = require("path");
 import {Stats} from "fs";
 
-import {Video, VideoList, VideoOrVideoList, RootList, isVideoList, isVideo, isUsefulList} from "./models";
+import {Video, VideoList, VideoOrVideoList, RootList, isVideoList, isVideo, isUsefulList, SearchingTask} from "./models";
 import {getUserData, writeUserData} from "./userData";
 import {readDir, stat} from "./promisifiedNode";
 import {SUPPORTED_FORMAT} from "./config";
 
 @Injectable()
 export class VideoService {
-    private data: RootList;
+    public data: RootList;
+
+    public searchingTasks: SearchingTask[] = [];
 
     public updateEventEmitter = new EventEmitter<RootList>();
 
@@ -21,7 +23,15 @@ export class VideoService {
 
         ipcRenderer.on("openVideo", (event: any, fullpath: string) => { this.onFileOpen(fullpath); });
 
-        ipcRenderer.on("openDir", (event: any, dirpath: string) => { this.onDirOpen(dirpath); });
+        ipcRenderer.on("openDir", (event: any, dirpath: string) => {
+            const task: SearchingTask = {
+                rootDirectory: dirpath,
+                currentDirectory: dirpath,
+                shouldCancel: false,
+                compeleted: false
+            };
+            this.searchDirectory(task);
+        });
 
 
         document.addEventListener('dragover', event => event.preventDefault());
@@ -40,7 +50,13 @@ export class VideoService {
                         if (stats.isFile()) {
                             this.onFileOpen(path);
                         } else {
-                            this.onDirOpen(path);
+                            const task: SearchingTask = {
+                                rootDirectory: path,
+                                currentDirectory: path,
+                                shouldCancel: false,
+                                compeleted: false
+                            };
+                            this.searchDirectory(task);
                         }
                     } catch (err) {
                         console.log(err);
@@ -98,10 +114,15 @@ export class VideoService {
         }
     }
 
-    async onDirOpen(dirpath: string) {
+    async searchDirectory(task: SearchingTask) {
         async function createVideoListFromDir(currentDir: string): Promise<VideoList> {
             try {
                 // console.log("currentDir: " + currentDir);
+                task.currentDirectory = currentDir;
+
+                if (task.shouldCancel) {
+                    return undefined;
+                }
 
                 const videoList: VideoList = {
                     name: currentDir,
@@ -113,11 +134,20 @@ export class VideoService {
                 const statses: Stats[] = [];
 
                 for (const promise of fileStatsPromises) {
-                    statses.push(await promise);
+                    try {
+                        statses.push(await promise);
+                    } catch (err) {
+                        statses.push(undefined);
+                    }
                 }
 
                 for (let i = 0; i < statses.length; i++) {
                     const stats = statses[i];
+
+                    if (!stats) {
+                        continue;
+                    }
+
                     if (stats.isFile()) {
                         if (SUPPORTED_FORMAT.map(x => `.${x}`).indexOf(path.extname(files[i]).toLowerCase()) > -1) {
                             const url = "file:///" + path.join(currentDir, files[i]).replace(/\\/g, "/");
@@ -147,7 +177,16 @@ export class VideoService {
             });
         }
 
-        const videoList = await createVideoListFromDir(dirpath);
+        this.searchingTasks.push(task);
+
+        const videoList = await createVideoListFromDir(task.rootDirectory);
+        task.compeleted = true;
+
+        const index = this.searchingTasks.indexOf(task);
+        if (index > -1) {
+            this.searchingTasks.splice(index, 1);
+        }
+
         if (videoList) {
             removeRedundantPath(videoList);
             this.data.push(videoList);
@@ -204,5 +243,14 @@ export class VideoService {
 
     playVideo(video: Video) {
         this.playingChange.emit(video);
+    }
+
+    public cancelSearchingTask(task: SearchingTask) {
+        task.shouldCancel = true;
+
+        const index = this.searchingTasks.indexOf(task);
+        if (index > -1) {
+            this.searchingTasks.splice(index, 1);
+        }
     }
 }

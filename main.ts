@@ -1,8 +1,16 @@
+import path = require("path");
+
+// https://github.com/RSATom/WebChimera.js/wiki/Latest-Electron-and-NW.js-versions-has-compatibility-issue-on-Windows
+if (process.platform === "win32") {
+    process.env["VLC_PLUGIN_PATH"] = path.join(__dirname, "node_modules/wcjs-prebuilt/bin/plugins");
+}
+
 import {app, BrowserWindow, Menu} from "electron";
 
 import {template as menuTemplate} from "./scripts/menuTemplate";
 import {readFileAsString} from "./app/promisifiedNode";
 import {Preference} from "./app/models";
+
 
 let mainWindow: Electron.BrowserWindow = undefined;
 

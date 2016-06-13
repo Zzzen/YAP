@@ -1,12 +1,16 @@
 import {Component, ElementRef, OnInit, OnDestroy, Input} from "@angular/core";
 import {remote} from "electron";
 import $ = require("jquery");
+import path = require("path");
 
 import {VideoService} from "./video.service";
 import {PreferenceService} from "./preference.service";
 import {Video} from "./models";
+// import {stat} from "./promisifiedNode";
 
 const wcjs: any = require("wcjs-player");
+
+// const SUPPORTED_SUBTITLE_FORMAT = ["sub", "srt", "webvtt"];
 
 @Component({
     selector: "yap-player",
@@ -115,12 +119,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
             this.preferenceService.preference.volume = newValue;
         });
 
-        // toggle fullscreen when dblclick
-        $wcpSurface.unbind("dblclick");
-        $wcpSurface.dblclick(event => {
-            $(".wcp-anim-basic").finish();
-            $(".wcp-pause-anim").finish();
-
+        function toggleFullscreen() {
             const isFullScreen = remote.getCurrentWindow().isFullScreen();
             remote.getCurrentWindow().setFullScreen(!isFullScreen);
             if (isFullScreen) {
@@ -128,6 +127,18 @@ export class PlayerComponent implements OnInit, OnDestroy {
             } else {
                 $(".wcp-maximize").removeClass("wcp-maximize").addClass("wcp-minimize");
             }
+        }
+
+        $(".wcp-button.wcp-right.wcp-maximize").unbind("click");
+        $(".wcp-button.wcp-right.wcp-maximize").click(() => toggleFullscreen());
+
+        // toggle fullscreen when dblclick
+        $wcpSurface.unbind("dblclick");
+        $wcpSurface.dblclick(event => {
+            $(".wcp-anim-basic").finish();
+            $(".wcp-pause-anim").finish();
+
+            toggleFullscreen();
         });
 
         function hideTitle() { $(".wcp-titlebar").fadeOut("slow"); }
@@ -154,8 +165,47 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
             this.player.vlc.play(video.fullpath);
             this.player.time(video.position);
+
+            // todo: support subtitles?
+
+            // this.player.clearPlaylist();
+
+            // (async () => {
+            //     const subtitle = await this.findPossibleSubtitles(video.fullpath);
+
+            //     if (subtitle) {
+            //         this.player.addPlaylist({
+            //             url: video.fullpath,
+            //             subtitles: {
+            //                 subtitle
+            //             }
+            //         });
+            //     } else {
+            //         this.player.addPlaylist({
+            //             url: video.fullpath
+            //         });
+            //     }
+
+            //     this.player.play();
+            //     this.player.time(video.position);
+            // })();
         }
     }
+
+    // async findPossibleSubtitles(url: string) {
+    //     const withoutExtensoin = url.match(/(.+\.)[^.]/)[1].replace("file:///", "");
+    //     // console.log(withoutExtensoin);
+
+    //     for (const format of SUPPORTED_SUBTITLE_FORMAT) {
+    //         try {
+    //             // if it doesn't exist, an exception will be throwed.
+    //             await stat(withoutExtensoin + format);
+    //             return withoutExtensoin + format;
+    //         } catch (err) { }
+    //     }
+
+    //     return undefined;
+    // }
 
     ngOnDestroy() {
         this.subscription.unsubscribe();

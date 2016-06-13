@@ -20,6 +20,13 @@ export interface Preference {
     fontColor: string;
 }
 
+export interface SearchingTask {
+    rootDirectory: string;
+    currentDirectory: string;
+    shouldCancel: boolean;
+    compeleted: boolean;
+}
+
 export type VideoOrVideoList = Video | VideoList;
 
 export type RootList = VideoOrVideoList[];

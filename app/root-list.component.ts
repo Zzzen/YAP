@@ -1,5 +1,5 @@
 import {Component, OnInit, Input} from "@angular/core";
-// import {remote} from "electron";
+import {remote} from "electron";
 
 import {TreeviewItemComponent} from "./treeview-item.component";
 import {Video, VideoList, Preference} from "./models";
@@ -12,7 +12,7 @@ import {PreferenceService} from "./preference.service";
     directives: [TreeviewItemComponent]
 })
 export class RootListComponent implements OnInit {
-    data = [] as (Video | VideoList)[];
+    data: (Video | VideoList)[];
     isShown = true;
 
     @Input()
@@ -37,33 +37,24 @@ export class RootListComponent implements OnInit {
     }
 
     async onWindowClose(event: BeforeUnloadEvent) {
-        if (this.forceQuit) {
-            event.returnValue = true;
-        } else {
-            this.forceQuit = true;
-            event.preventDefault();
+        if (!this.forceQuit) {
+            // prevent window from closing
+            event.returnValue = false;
 
-            // remote.getCurrentWindow().hide();
+            remote.getCurrentWindow().hide();
 
             try {
-                // doesn't work?
-
-                // await this.videoService.saveData();
-                // await this.preferenceService.writePreference();
-
                 await Promise.all([this.videoService.saveData(), this.preferenceService.writePreference()]);
-
-                window.close();
             } catch (err) {
                 console.log(err);
             } finally {
+                this.forceQuit = true;
+                remote.getCurrentWindow().close();
             }
         }
     };
 
     ngOnInit() {
-        this.getData();
-
         const element = document.getElementById("rootList");
 
         window.onmouseup = () => this.stopDragging();
@@ -81,13 +72,8 @@ export class RootListComponent implements OnInit {
     }
 
     constructor(private videoService: VideoService, private preferenceService: PreferenceService) {
+        this.data = videoService.data;
         this.preference = preferenceService.preference;
-    }
-
-    getData() {
-        this.videoService.getData().then(data => {
-            this.data = data;
-        });
     }
 
     getRgbaString() {
