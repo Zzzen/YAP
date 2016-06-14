@@ -6,6 +6,7 @@ export interface Video {
 export interface VideoList {
     name: string;
     videos: (Video | VideoList)[];
+    isExpanded: boolean;
 }
 
 export interface Preference {

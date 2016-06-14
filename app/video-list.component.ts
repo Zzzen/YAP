@@ -1,4 +1,4 @@
-import {Component, Input, forwardRef, ElementRef} from "@angular/core";
+import {Component, Input, forwardRef, ElementRef, OnInit} from "@angular/core";
 import * as $ from "jquery";
 
 import {VideoList} from "./models";
@@ -11,21 +11,25 @@ import {PreferenceService} from "./preference.service";
     templateUrl: "./video-list.component.html",
     directives: [forwardRef(() => TreeviewItemComponent)]
 })
-export class VideoListComponent {
+export class VideoListComponent implements OnInit {
     @Input()
     videoList: VideoList;
-
-    isExpanded = true;
 
     constructor(private elementRef: ElementRef, private videoService: VideoService, private preferenceService: PreferenceService) {
     }
 
     toggle() {
-        this.isExpanded = !this.isExpanded;
+        this.videoList.isExpanded = !this.videoList.isExpanded;
         $(this.elementRef.nativeElement).children().children("ul").toggle("fast");
     }
 
     onRemove() {
         this.videoService.removeVideoOrList(this.videoList);
+    }
+
+    ngOnInit() {
+        if (!this.videoList.isExpanded) {
+            $(this.elementRef.nativeElement).children().children("ul").hide("fast");
+        }
     }
 }

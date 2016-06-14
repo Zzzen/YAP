@@ -126,7 +126,8 @@ export class VideoService {
 
                 const videoList: VideoList = {
                     name: currentDir,
-                    videos: []
+                    videos: [],
+                    isExpanded: false
                 };
 
                 const files = await readDir(currentDir);

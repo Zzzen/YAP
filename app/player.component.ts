@@ -1,7 +1,6 @@
 import {Component, ElementRef, OnInit, OnDestroy, Input} from "@angular/core";
 import {remote} from "electron";
 import $ = require("jquery");
-import path = require("path");
 
 import {VideoService} from "./video.service";
 import {PreferenceService} from "./preference.service";
@@ -102,6 +101,8 @@ export class PlayerComponent implements OnInit, OnDestroy {
             autoplay: true,
             wcjs: require("wcjs-prebuilt")
         });
+
+        $(".wcp-subtitle-but").hide();
 
         const $wcpSurface = $(".wcp-surface");
         $wcpSurface[0].addEventListener("wheel", event => {
