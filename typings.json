@@ -7,6 +7,7 @@
   "globalDependencies": {
     "github-electron": "registry:dt/github-electron#1.0.2+20160523035412",
     "jquery": "registry:dt/jquery#1.10.0+20160417213236",
+    "lodash": "registry:dt/lodash#3.10.0+20160330154726",
     "node": "registry:dt/node#6.0.0+20160524002506",
     "winston": "registry:dt/winston#0.0.0+20160417152829"
   }

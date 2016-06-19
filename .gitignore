@@ -13,3 +13,5 @@ stylesheets/*.css
 
 userData.json
 preference.json
+
+.vscode/.browse.vc.db

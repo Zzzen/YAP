@@ -3,6 +3,8 @@
 
 @setting-time: 0.4s;
 
+@button-size: 50px;
+
 .fillingParent{
     position: absolute;
     left: 0px;
@@ -24,9 +26,120 @@ body{
         transform: translateY(0px);
         transition: transform @setting-time ease-in-out;
 
+        background-color: black;
+
         &.isHidden{
             transform: translateY(100%);
 	        transition: transform @setting-time ease;
+        }
+
+        &.hideCursor{
+            cursor: none;
+        }
+
+        canvas{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+        }
+
+        #controls{
+            position: absolute;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            height: 80px;
+            transition: bottom @default-in-time ease-in;
+
+            &.isHidden{
+                bottom: -100px;
+            }
+
+            #currentTimeLabel{
+                pointer-events: none;
+
+                position: absolute;
+                top: -25px;
+                transform: translateX(-50%);
+                background-color: rgba(255, 255, 255, 0.8);
+                border-radius: 3px;
+                opacity: 0;
+                transition: opacity @default-out-time ease;
+
+                &.isShown{
+                    opacity: 1;
+                    transition: opacity @default-in-time ease;
+                }
+            }
+
+            #controlBar{
+                margin-top: 40px;
+
+                .timeLabel{
+                    position: absolute;
+                    left: 0px;
+                    pointer-events: none;
+                    -webkit-user-select: none;
+                }
+
+                #buttons{
+                    position: absolute;
+                    left: 50%;
+                    top: 45px;
+                    transform: translate(-50%, -50%);
+
+                    >div{
+                        display: inline-block;
+                        vertical-align: middle;
+                    }
+
+
+                    .prev, .next{
+                        width: @button-size;
+                        height: @button-size;
+                    }
+
+
+                    svg{
+                        circle{
+                            fill: rgba(255, 255, 255, 0.8);
+                            transition: fill @default-out-time ease;
+                        }
+
+                        &:hover{
+                            circle{
+                                fill: rgba(71, 144, 208, 0.95);
+                            }
+                        }
+                    }
+
+
+
+                    #togglePauseButton{
+                        position: relative;
+
+                        >div {
+                            width: 1.3 * @button-size;
+                            height: 1.3 * @button-size;
+                            z-index: -1;
+
+                            opacity: 0;
+                            transition: opacity @default-out-time ease;
+
+                            &.isShown{
+                                z-index: 1;
+                                opacity: 1;
+                                transition: opacity @default-in-time ease;
+                            }
+
+                            &.pause{
+                                position: absolute;
+                                top: 0;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

@@ -1,0 +1,18 @@
+#player( [class.isHidden]="focusSetting", [class.hideCursor]="!showControls", (click)="onClick()", (wheel)="onWheel($event)" )
+    canvas#canvas()
+    #controls((click)="stopPropagation($event)", [class.isHidden]="!showControls")
+        div#progressBar
+            input#timeInput(type="range", (click)="onTimeClick($event)", (focus)="startDraggingTime($event)" , [(ngModel)]="currentShowedTime", min="0", [max]="currentVideoLength", (change)="onTimeChangedManually($event)")
+            #currentTimeLabel( [class.isShown]="isDraggingTime", [style.left]=" '' + currentShowedTime * 100 / currentVideoLength + '%'") {{formatTime(currentShowedTime)}}
+        div#controlBar
+            div.timeLabel {{formatTime(vlcTime) + " / " + formatTime(currentVideoLength)}}
+            div#buttons
+                .prev( (click)="tryPlayingPrev()" )
+                    include ../resources/prev.svg
+                #togglePauseButton( (click)="togglePause()" )
+                    div.play([class.isShown]="!isPlaying")
+                        include ../resources/play.svg
+                    div.pause([class.isShown]="isPlaying")
+                        include ../resources/pause.svg
+                .next( (click)="tryPlayingNext()" )
+                    include ../resources/next.svg
